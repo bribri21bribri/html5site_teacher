@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drawing App</title>
+    <style>
+            #myCanvas{
+               border:1px solid green;
+            }
+         </style>
+</head>
+<body>
+        <input type="color" id="color1">
+        <input type="number" id="number1" min="2" max="20" value="8" step="2" >
+        <hr >
+        <canvas id="myCanvas" width="460px" height="300px"></canvas>
+
+        <script>
+                var canvas = document.querySelector("#myCanvas"),
+                    context = canvas.getContext("2d"),
+                    theColor = document.querySelector('#color1'),
+                    theWidth = document.querySelector("#number1"),
+                    flag = false;
+
+               canvas.addEventListener('mousedown',function(event){
+                  //console.log(event);
+                  flag = true;
+                  context.strokeStyle = theColor.value;
+                  context.lineWidth = theWidth.value;
+                  context.beginPath();
+                  context.moveTo(event.offsetX,event.offsetY);
+               });
+               canvas.addEventListener('mousemove',function(event){
+                  //console.log(event);
+                  if(flag){
+                      context.lineTo(event.offsetX,event.offsetY);
+                      context.stroke();
+                  }                  
+               });
+               canvas.addEventListener('mouseup',function(event){
+                  //console.log(event);
+                  flag = false;
+               });
+        </script>
+</body>
+</html>

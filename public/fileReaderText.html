@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File Object</title>
+    <style>
+      #zone1{
+          border:1px solid green;
+          width:600px;
+          height:400px;
+          overflow:scroll;
+      }
+    </style>
+</head>
+<body>  
+    <input type="file" id="file1" />
+    <hr />
+    <div id="zone1">   
+        
+    </div>
+  
+    <script>
+      //產生File Object的方法一
+      document.querySelector('#file1').addEventListener('change',function(){
+          fileInfo(this.files[0]);  //this.files[0] 
+      })
+      function fileInfo(theFile){
+        //  console.log(theFile.name); //檔案名稱
+        //  console.log(theFile.type); //檔案類型
+        //  console.log(theFile.size); //檔案大小
+        //  console.log(theFile.lastModifiedDate); //最後校正日期
+
+        //讀取文字檔的內容
+        var reader = new FileReader();
+        reader.readAsText(theFile,'UTF-8');
+        reader.addEventListener('load',function(event){
+            dropZone.textContent = event.target.result;
+        })
+
+      }
+       //產生File Object的方法二
+      var dropZone = document.querySelector('#zone1');
+      dropZone.addEventListener("dragover",function(event){
+          event.preventDefault();
+      })
+      dropZone.addEventListener("drop",function(event){
+         event.preventDefault();
+         event.stopPropagation();
+
+         //event.dataTransfer.files[0] 就是File Object
+         fileInfo(event.dataTransfer.files[0]);
+      })
+    </script>
+</body>
+</html>

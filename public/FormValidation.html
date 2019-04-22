@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <style>
+        div {
+            border-bottom:1px solid #efefef;
+            width:480px;
+            margin:0px auto;
+            padding-bottom:10px;
+        }
+
+        .title {
+            float:left;
+            width:100px;
+            text-align:right;
+            padding-right:10px;
+        }
+        input[type="submit"] {
+
+          margin-left:110px;
+            
+        }
+      
+        fieldset {
+            border: 1px solid #CCA383;
+            border-radius: 10px;
+            margin:0px auto;
+            width: 480px;
+            background: #FFE8EF;
+            padding: 3px;
+        }
+        fieldset>legend {
+            background: #CCE8CC;
+            padding: 6px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        input~span{
+            margin-left:5px;
+        }
+
+        input:invalid{
+            border:dashed 1px red;
+        }
+        input:valid{
+            border:solid 1px green;
+        }
+        input:required{
+            background-color:pink;
+        }
+    </style>
+    
+</head>
+<body>
+    <fieldset>
+        <legend>會員註冊</legend>
+    <form name="myForm">
+        <div>
+           <label for="account" class="title">帳號</label>
+            <input type="text" id="account" name="account" autofocus autocomplete="off" required  /><span></span>
+            <!-- 1.網頁載入時將游標停駐在帳號的文字輸入方塊中 
+                 2.取消瀏覽器會自動記錄輸入資料的功能 
+                 3.請確定帳號一定要輸入-->
+        </div>
+        <div>
+           <label for="pwd1" class="title">密碼</label><input type="password" id="pwd1" name="pwd1" /><span></span>
+        </div>
+        <div>
+           <label for="pwd2" class="title">密碼確認</label><input type="password" id="pwd2" name="pwd2" /><span></span>
+        </div>
+        <div>
+           <label for="email" class="title">電子郵件</label>
+            <input type="email" id="email" name="email" /><span></span>
+            <!--1.請填入正確type的屬性值. 2.確定符合正確的電子郵件格式-->
+        </div>
+        <div>
+           <label for="blog" class="title">部落格</label>
+            <input type="url" id="blog" name="blog" /><span></span>
+            <!--1.請填入正確type的屬性值. 2.確定符合正確的網址格式-->
+        </div>
+        <div>
+           <label for="phone" class="title">連絡電話</label>
+            <input type="tel" id="phone" name="phone" placeholder="0911-111-111" pattern="09\d{2}-\d{3}-\d{3}" /><span></span>
+            <!--1.請填入正確的type. 
+                2.提示使用者輸入正確的手機格式(0911-111-111) 
+                3.確定手機格式正確(09\d{2}-\d{3}-\d{3})-->
+        </div>
+        <div>
+             <label for="age" class="title">年紀</label> 
+            <input type="number" id="age" name="age" max="100" min="10" value="20" /><span></span>
+            <!--1.請填入正確的type. 2.最小值10 3.最大值100 4.預設值20-->
+        </div>
+        <div class="submit">
+            <label for="buttonSubmit" class="title"></label> 
+            <button type="submit" id="buttonSubmit">送出</button>
+            <ul id="summary"></ul>
+        </div>
+    </form>
+        
+    </fieldset>
+
+    <script>
+        var inputs = document.querySelectorAll('input');
+        for (var i = 0, max = inputs.length; i < max; i++) {
+            inputs[i].addEventListener("blur", validate);
+        }
+
+        function validate() {
+            var title = document.querySelector('label[for="' + this.id + '"]').firstChild.nodeValue;
+            if (this.id == "pwd2") {
+                if (this.value != document.querySelector('#pwd1').value) {
+                    this.setCustomValidity("密碼不一致!!");
+                } else {
+                    this.setCustomValidity("");
+                }
+            } else {
+                var s = this.validity;
+                var error = "";
+                switch (true) {
+                    case s.valueMissing:
+                        error = title + " 是必填欄位!!";
+                        break;
+                    case s.patternMismatch:
+                        error = title + " 格式不正確";
+                        break;
+                    case s.typeMismatch:
+                        error = title+ "型態不符";
+                        break;
+                    case s.rangeOverflow:
+                        error = title + "超過最大值";
+                        break;
+                    case s.rangeUnderflow:
+                        error = title + "超過最小值";
+                        break;
+                    case s.tooLong:
+                        error = title + "超過長度";
+                        break;
+                    case s.stepMismatch:
+                        error = title + "step不對";
+                        break;
+
+                }
+
+                this.setCustomValidity(error);
+            }
+        }
+
+
+        //取消瀏覽器預設的validation bubble
+        var form = document.myForm;
+        form.addEventListener("invalid", function (event) {
+            event.preventDefault();
+        }, true); //一定是要true 表示user capture
+
+
+        //自訂顯示錯誤訊息，統一集中錯誤訊息
+        var btn = document.getElementById("buttonSubmit")
+        btn.addEventListener("click", function () {
+              //清除所有span標籤上的內容
+               var spans = document.querySelectorAll('form[name="myForm"]>div>span');
+              for(var i=0,max=spans.length;i<max;i++){
+                 spans[i].innerHTML = "";
+              }
+
+          
+            var invalidFields = form.querySelectorAll(":invalid"),
+                theUl =  document.getElementById("summary");
+            //清除原有的錯誤訊息
+            while(theUl.hasChildNodes()) {
+                theUl.removeChild(theUl.lastChild);
+            }
+            for (var i = 0; i < invalidFields.length; i++) {
+                var eleLi = document.createElement("li");
+                var txtLi = document.createTextNode(invalidFields[i].validationMessage);
+                eleLi.appendChild(txtLi);
+                theUl.appendChild(eleLi);
+
+                var spn = document.querySelector('#' + invalidFields[i].id + "~span")
+                spn.innerHTML="*";
+                spn.style.color = "red";
+            }
+        });        
+    </script>
+</body>
+</html>

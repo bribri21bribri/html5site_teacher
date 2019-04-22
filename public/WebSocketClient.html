@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <div id="div1"></div>
+
+    <script>
+        var myDiv = document.querySelector('#div1');      
+       var socket = new WebSocket("ws://echo.websocket.org");
+       socket.addEventListener("open",function(){
+          myDiv.innerHTML += "連線成功<br>";
+          socket.send("Hello From localhost!!")
+       })
+       socket.addEventListener("message",function(event){
+           myDiv.innerHTML += event.data + "<br>";
+           socket.close();
+       })
+       socket.addEventListener("close",function(){
+          myDiv.innerHTML += "連線關閉<br>";
+       })
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>pie chart</title>
+    <style>
+            #myCanvas{
+                border:1px solid green;
+            }
+        </style>
+</head>
+<body>
+        <canvas id="myCanvas" width="400px" height="300px"></canvas>
+        
+    <script>
+            var canvas = document.querySelector('#myCanvas'),
+                context = canvas.getContext('2d'),                
+                startAngle = 0,
+                r = 100,
+                x = canvas.width/2,
+                y = canvas.height / 2;
+
+            var datas = [
+                {item:'ItemA',value:15, color:'lightblue'},
+                {item:'ItemB',value:35, color:'lightpink'},
+                {item:'ItemC',value:20, color:'lightgreen'},
+                {item:'ItemD',value:30, color:'lightgray'},
+            ]
+
+            for (var i=0,max=datas.length;i<max;i++){
+               var endAngle = Math.PI * 2 * datas[i].value/100;
+
+               context.beginPath();
+               context.moveTo(x,y);
+               context.arc(x,y,r,startAngle,startAngle+endAngle);
+               context.closePath();
+               context.fillStyle = datas[i].color;
+               context.fill();
+
+               fx = x + r/2 * (Math.cos(startAngle + endAngle/2));
+                fy = y + r/2 * (Math.sin(startAngle + endAngle/2));
+                context.fillStyle = "black";
+                context.textAlign = "center";
+                context.fillText(Math.round(100 * datas[i].value / 100) + '%', fx, fy);
+
+
+
+               startAngle += endAngle;
+
+            }
+   </script>
+</body>
+</html>

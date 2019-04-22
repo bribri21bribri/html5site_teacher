@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas Image</title>
+    <style>
+       #myCanvas{
+          border:1px solid green;
+       }
+    </style>
+</head>
+<body>
+    <input type="file" id="file1"><br>
+    <canvas id="myCanvas" width="400px" height="300px"></canvas>
+   
+    <script>
+       var canvas = document.querySelector('#myCanvas'),
+        context = canvas.getContext('2d');
+
+       document.querySelector('#file1').addEventListener('change',show);
+       function show(){
+        //    console.log(this.files[0])
+        //    console.log(this.files[0].name)
+
+       var imageObj = new Image();
+       imageObj.src = this.files[0].name;  //不正確的寫法，要換成FileReader物件來讀圖
+       //load 事件 圖讀到Image物件後會觸發
+       //click、mouseover、focus、change....
+       //使用者的操作行為
+       imageObj.addEventListener('load',function(){
+           //context.drawImage(imageObj,0,0);
+           context.drawImage(imageObj,0,0,canvas.width,canvas.height);
+           //context.drawImage(imageObj,190,72,190,200,0,0,95,100);
+       })
+       }
+       
+    </script>
+</body>
+</html>

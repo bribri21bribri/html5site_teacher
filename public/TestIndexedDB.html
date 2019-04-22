@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script>
+        if(!window.indexedDB){
+            window.indexedDB = window.mozIndexedDB || window.webkitIndexedDB;
+        }
+        var db;
+        window.addEventListener("load", init, false);
+        function init() {
+            var btnCreateDB = document.getElementById("buttonCreateDB");
+            btnCreateDB.addEventListener("click", createDatabase, false);
+
+            var btnDeleteDB = document.getElementById("buttonDeleteDB");
+            btnDeleteDB.addEventListener("click", deleteDatabase, false);
+
+            var btnCreateOS = document.getElementById("buttonCreateOS");
+            btnCreateOS.addEventListener("click", createObjectStore, false);
+
+            var btnDeleteOS = document.getElementById("buttonDeleteOS");
+            btnDeleteOS.addEventListener("click", deleteObjectStore, false);
+
+
+            var btnAdd = document.getElementById("buttonAdd");
+            btnAdd.addEventListener("click", addData, false);
+
+
+            var btnUpdate = document.getElementById("buttonUpdate");
+            btnUpdate.addEventListener("click", updateData, false);
+
+            var btnDelete = document.getElementById("buttonDelete");
+            btnDelete.addEventListener("click", deleteData, false);
+
+
+            var btnRead = document.getElementById("buttonReadByCursor");
+            btnRead.addEventListener("click", readDataByCursor, false);
+
+
+            var btnRead1 = document.getElementById("buttonReadByIndex");
+            btnRead1.addEventListener("click", readDataByIndex, false);
+        }
+
+        //建立資料庫
+        function createDatabase() {
+           var indexDB = window.indexedDB.open("aDB",1);
+           //建立或開啟資料庫失敗會觸發error事件
+           indexDB.addEventListener("error",errorHandler)
+           function errorHandler(event){
+               console.log(event.target.error.message);
+           }
+           //建立或開啟資料庫成功會觸發success事件
+           indexDB.addEventListener("success",function(event){
+               db = event.target.result;
+               console.log("success")
+               console.log(db);
+           })
+           
+           //建立資料庫或版本改變時會觸發upgradeneeded事件
+           indexDB.addEventListener("upgradeneeded",function(event){
+               console.log("upgradeneeded");
+           })
+
+
+        }
+
+        //刪除資料庫
+        function deleteDatabase() {
+         var indexDB = window.indexedDB.deleteDatabase("aDB",2);
+           //建立或開啟資料庫失敗會觸發error事件
+           indexDB.addEventListener("error",errorHandler)
+           function errorHandler(event){
+               console.log(event.target.error.message);
+           }
+           //建立或開啟資料庫成功會觸發success事件
+           indexDB.addEventListener("success",function(event){
+              alert("刪...")
+           })
+        }
+
+        function errorHandler(event){
+            console.log(event.target.error.message);
+        }
+
+        //建立 Object Store
+        function createObjectStore() {
+           var indexDB = window.indexedDB.open("MyDB",2);
+           //建立或開啟資料庫失敗會觸發error事件
+           indexDB.addEventListener("error",errorHandler)
+         
+           //建立或開啟資料庫成功會觸發success事件
+           indexDB.addEventListener("success",function(event){
+               db = event.target.result;
+               console.log("success")
+               console.log(db);
+           })
+           
+           //建立資料庫或版本改變時會觸發upgradeneeded事件
+           indexDB.addEventListener("upgradeneeded",function(event){
+               console.log("upgradeneeded");
+               db = event.target.result;
+
+               //建立ObjectStore
+               if(db.objectStoreNames.contains("employees")){
+                   console.log("employees存在")
+               }else{
+                   var store = db.createObjectStore("employees",{
+                            "keyPath":"empId",
+                            "autoIncrement":true
+                   })
+
+                   store.createIndex("nameIndex","name",{"unique":true})
+                   store.createIndex("ageIndex","age",{"unique":false})
+               }
+               
+           })
+        }
+
+        //刪除 Object Store
+        function deleteObjectStore() {
+           
+        }
+
+        //新增資料
+        function addData() {
+           if(db == null){
+               alert("請先開啟資料庫")
+           }else{
+               //console.log(db);
+               //add
+               var trans = db.transaction(["employees"],"readwrite");
+               var store = trans.objectStore("employees");
+               var datas = [
+                    {"name":"Steve","age":25,"email":"Steve@gmail.com"},
+                    {"name":"Fiona","age":36,"email":"Fiona@gmail.com"},
+                    {"name":"Tracy","age":28,"email":"Tracy@gmail.com"},
+                    {"name":"Jimmy","age":39,"email":"Jimmy@gmail.com"}
+               ];
+
+               for(var i=0,max=datas.length;i<max;i++){
+                store.add(datas[i]);
+               }
+            //    var addRequest = store.add({"name":"Jack","age":30,"email":"Jack@gmail.com"});
+            //    addRequest.addEventListener("success",function(){
+            //        alert("新增成功!!");
+            //    })
+            //    addRequest.addEventListener("error",errorHandler)
+
+           }
+                
+
+        }
+        //修改資料
+        function updateData() {
+            if(db == null){
+               alert("請先開啟資料庫")
+           }else{
+               //console.log(db);
+               //add
+               var trans = db.transaction(["employees"],"readwrite");
+               var store = trans.objectStore("employees");
+               var putRequest = store.put({"empId":2,"name":"Mary","age":27,"email":"Mary@gmail.com"});
+               putRequest.addEventListener("success",function(){
+                   alert("修改成功!!");
+               })
+               putRequest.addEventListener("error",errorHandler)
+
+           }
+                
+        }
+
+        //刪除資料
+        function deleteData() {
+            if(db == null){
+               alert("請先開啟資料庫")
+           }else{
+               //console.log(db);
+               //add
+               var trans = db.transaction(["employees"],"readwrite");
+               var store = trans.objectStore("employees");
+               var delRequest = store.delete(1);
+               delRequest.addEventListener("success",function(){
+                   alert("刪除成功!!");
+               })
+               delRequest.addEventListener("error",errorHandler)
+
+           }
+        }
+
+        //透過Cursor讀取資料
+        function readDataByCursor() {
+            if(db == null){
+                alert("請先開啟資料庫")
+            }else{
+               var trans = db.transaction(["employees"],"readonly");
+               var store = trans.objectStore("employees");
+
+               //讀出所有資料
+               //var cursorRequest = store.openCursor();
+               //讀出員工編號5的資料
+               //var cursorRequest = store.openCursor(IDBKeyRange.only(5));
+
+               //切換到nameIndex
+            //    var nameIdx = store.index("nameIndex");
+            //    var cursorRequest = nameIdx.openCursor(IDBKeyRange.only('Tracy'));
+
+               //切換到ageIndex
+               var ageIdx = store.index("ageIndex");
+               //var cursorRequest = ageIdx.openCursor(IDBKeyRange.only(30));
+               //age<30               
+               //var cursorRequest = ageIdx.openCursor(IDBKeyRange.upperBound(30,true));
+               //age<=30               
+               //var cursorRequest = ageIdx.openCursor(IDBKeyRange.upperBound(30,false));
+               
+               //age 27-36              
+               var cursorRequest = ageIdx.openCursor(IDBKeyRange.bound(27,36,false,true));
+               //console.log(cursorRequest);
+               cursorRequest.addEventListener("error",errorHandler);               
+               cursorRequest.addEventListener("success",function(event){
+                   
+                     var result = event.target.result;
+                     if(!result){
+                         return;
+                     }     
+                     console.log(result.value);
+                     console.log(result.value.name);
+                     console.log(result.value.email);
+                     result.continue();
+               })
+            }
+        }
+
+        //透過Index讀取資料
+        function readDataByIndex() {
+            if(db == null){
+                alert("請先開啟資料庫")
+            }else{
+               var trans = db.transaction("employees","readonly");
+               var store = trans.objectStore("employees");
+
+               var nameIdx = store.index("nameIndex");
+               var request = nameIdx.get('Jack');
+               request.addEventListener("success",function(event){
+                   console.log(event.target.result.email);
+               })
+
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+    <input type="button" value="建立資料庫" id="buttonCreateDB" disabled />
+    <input type="button" value="刪除資料庫" id="buttonDeleteDB" disabled />
+    <input type="button" value="建立ObjectStore" id="buttonCreateOS" />
+    <input type="button" value="刪除ObjectStore" id="buttonDeleteOS" />
+    <input type="button" value="新增資料" id="buttonAdd" />
+    <input type="button" value="更新資料" id="buttonUpdate" />    
+    <input type="button" value="刪除資料" id="buttonDelete" /> 
+    <input type="button" value="讀取資料(Cursor)" id="buttonReadByCursor" />
+    <input type="button" value="讀取資料(Index)" id="buttonReadByIndex" />
+    <hr />
+    <p>按下新增資料,更新資料,刪除資料,讀取資料以前,請先點選建立ObjectStore</p>
+</body>
+</html>

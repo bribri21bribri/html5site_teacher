@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Storage</title>
+</head>
+<body>
+    <input type="text" placeholder="localstorage" id="local1">
+    <input type="text" placeholder="sessionstorage" id="session1">
+    <input type="button" value="set" id="button1">
+    <input type="button" value="get" id="button2">
+    <input type="button" value="del" id="button3">
+    <input type="button" value="getAll" id="button4">
+    <hr />
+    <div id="div1"></div>
+
+    <script>
+        var btnSet = document.querySelector('#button1'),
+           btnGet = document.querySelector('#button2'),
+           btnDelete = document.querySelector('#button3'),
+           btnAll = document.querySelector('#button4'),
+           myDiv = document.querySelector('#div1'),
+           txt1 = document.querySelector('#local1'),
+           txt2 = document.querySelector('#session1');
+
+           btnSet.addEventListener('click',function(){
+            //localStorage.setItem("local",txt1.value);
+            //存入JSON時，要將JSON物件轉成JOSN字串
+            localStorage.setItem("emp",JSON.stringify({"name":"Jack","age":30}));
+           })
+
+           
+           btnGet.addEventListener('click',function(){
+            //   var local1 =  localStorage.getItem("local");
+            //   var session1 =  sessionStorage.getItem("session");
+            //   myDiv.innerHTML = "local:" + local1 + "<br>session:" + session1;
+            //讀取JSON時，要將JSON字串轉成JOSN物件，才能用
+             var emp = JSON.parse(localStorage.getItem("emp"));
+             myDiv.innerHTML = emp.name;
+           })
+
+           
+           btnDelete.addEventListener('click',function(){
+              //localStorage.removeItem("local"); //刪除一筆
+              localStorage.clear(); //刪除所有資料
+           })
+           btnAll.addEventListener('click',function(){
+              var str = "";
+             for(var i=0,max=localStorage.length;i<max;i++){
+                 var keyname = localStorage.key(i); //key(i)回傳key的名稱
+                 str += localStorage.getItem(keyname) + "<br>";
+             }
+             myDiv.innerHTML = str;
+           })
+    </script>
+</body>
+</html>

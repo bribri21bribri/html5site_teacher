@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form novalidate>
+       <input type="text" name="userName" placeholder="user name" required autofocus autocomplete="off"><br>
+       <input type="email" name="email" placeholder="user email"><br> 
+       <input type="tel" name="phone" placeholder="0911-222-333" pattern="09\d{2}-\d{3}-[0-9]{3}"><br>
+       <input type="number" name="age" min="10" max="50" step="2"><br>
+       <input type="password" name="pwd1" id="pwd1" placeholder="密碼"><br>
+       <input type="password" name="pwd2" id="pwd2" placeholder="密碼確認"><br>
+       <input type="text" name="link" list="lists"><br>
+       <input type="file" name="file1" multiple><br>
+       <!-- <select>
+           
+       <option value="http://www.facebook.com">facebook</option>
+       <option value="http://www.google.com">google</option>
+       <option value="http://www.pchome.com.tw">pchome</option>
+       </select> -->
+       <input type="submit" value="送出" id="buttonSubmit">
+
+    </form>
+    <datalist id="lists">
+       <option value="http://www.facebook.com" label="facebook"></option>
+       <option value="http://www.google.com" label="google"></option>
+       <option value="http://www.pchome.com.tw" label="pchome"></option>
+    </datalist>
+
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script>
+        $('#buttonSubmit').click(function(event){
+            //event.preventDefault();
+            var p1 = $('#pwd1').val();
+            var p2 = $('#pwd2').val();
+            if(p1 !== p2){
+                alert('密碼不一致!!')
+            }
+        })
+    </script>
+</body>
+</html>

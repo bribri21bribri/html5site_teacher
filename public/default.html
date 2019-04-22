@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Hello HTML5!!</h2>
+    <audio src="musics/K歌之王.mp3" controls></audio>
+    <br>
+    <video id="video1" controls>
+       <source src="videos/big_buck_bunny.mp4" type="video/mp4" />
+       <source src="videos/big_buck_bunny.ogv" type="video/ogv" />
+       <source src="videos/big_buck_bunny.webm" type="video/webm" />
+       <track kind="subtitles" src="videos/bunny_en.vtt" srclang="en" label="English" />
+       <track kind="subtitles" src="videos/bunny_zhtw.vtt" srclang="zh-tw" label="繁體" />
+    </video>
+    <hr>
+    <input type="button" value="擷取" id="button1">
+    <div id="div1"></div>
+    <script>
+      var myDiv = document.querySelector('#div1'),
+         myVideo = document.querySelector('#video1'),
+         btn = document.querySelector('#button1');
+
+         btn.addEventListener("click",function(){
+             var canvas = document.createElement("canvas"),
+                 context = canvas.getContext('2d');
+            context.drawImage(myVideo,0,0,canvas.width,canvas.height);
+
+            myDiv.appendChild(canvas);
+
+
+         })
+    </script>
+</body>
+</html>

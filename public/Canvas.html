@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas Demo</title>
+    <style>
+       #myCanvas{
+           border:1px solid green;
+       }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="400" height="300"></canvas>
+
+    <script>
+       var canvas = document.querySelector("#myCanvas"),
+           context = canvas.getContext("2d");
+        
+        context.fillStyle = "lightgreen";
+        context.strokeStyle = "red";
+        context.lineWidth = "3";
+        
+        //陰影
+
+
+        //繪製矩形
+        // context.fillRect(100,50,200,90);
+        // context.strokeRect(100,160,200,90);
+        // context.clearRect(150,70,100,50);
+
+        //畫線
+        // context.beginPath();
+        // context.moveTo(50,150);
+        // context.lineTo(50,250);
+        // context.lineTo(200,250);      
+        // context.closePath();
+        // context.stroke();
+
+        //畫弧及圓        
+        // var x = canvas.width /  2;
+        // var y = canvas.height / 2;
+        // var r = 100;
+        // context.moveTo(x,y);
+        // //context.arc(x,y,r,Math.PI * 1, Math.PI * 1.5, false);        
+        //  context.arc(x,y,r,Math.PI * 0, Math.PI * 2, false);
+        // context.fill();
+
+        //畫圖
+        // var imageObj = new Image();
+        // imageObj.src = "cars.jpg";
+        // imageObj.addEventListener("load",function(){
+        //    // context.drawImage(imageObj,0,0);
+        //    // context.drawImage(imageObj,0,0,200,150);
+           
+        //    context.drawImage(imageObj,180,80,220,180,0,0,220,180);
+        // })
+
+        //寫字
+        // var x = canvas.width /  2;
+        // var y = canvas.height / 2;
+        // context.font = "48px serif";
+        // context.textAlign = "center";
+        // //context.strokeText("Hello Canvas Text!!",x,y);
+        // context.fillText("Hello Canvas Text!!",x,y);
+    </script>
+</body>
+</html>

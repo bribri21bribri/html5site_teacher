@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p>aaaa</p>
+    <p>bbbb</p>
+    <p>cccc</p>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+        <script>
+        //    $('p').each(function(){
+        //        alert($(this).text());
+        //    })
+        var datas = ["aaaa","bbbb","cccc"];
+        //array [index:value,index:value,index:value]
+        var data = {"name":"Tom","age":30,"email":"Tom@gmail.com"}
+        //object{key:value,key:value,key:value...}
+        // $.each(datas,function(idx,item){
+        //     //第一個參數表示index
+        //     //第二個參數表示value
+        //     console.log(item);
+        // })
+        $.each(data,function(a,b){
+            //第一個參數表示index
+            //第二個參數表示value
+            console.log(a);
+        })
+        </script>
+</body>
+</html>

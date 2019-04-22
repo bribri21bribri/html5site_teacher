@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="div1"></div>
+
+    <script>
+        var myDiv = document.querySelector('#div1');
+        var source = new EventSource("/api/youbike");
+        //    source.addEventListener("open",function(){
+        //        myDiv.innerHTML ="連線成功"
+        //    })
+        source.addEventListener("message", function (event) {
+            // var data = JSON.parse(event.data);
+            // var msg = "";
+            // msg += "<b>站名 :</b> " + data.retVal["0001"].sna;
+            // msg += "<b> 更新時間：</b>" + ConvertTime(data.retVal["0001"].mday);
+            // msg += "<b> 目前停車數量：</b>" + data.retVal["0001"].sbi;
+            // msg += "<b> 空位數量：</b>" + data.retVal["0001"].bemp + "<br>";
+            // myDiv.innerHTML += msg + '<br/>';
+            myDiv.innerHTML = event.data;
+        })
+
+        //將YYYYMMDDHHMMSS的時間格式轉成YYYY/MM/DD HH:MM:SS
+        function ConvertTime(OldTime) {
+            return OldTime.substring(0, 4) + "/" + OldTime.substring(4, 6) + "/" + OldTime.substring(6, 8) + " " + OldTime.substring(8, 10) + ":" + OldTime.substring(10, 12) + ":" + OldTime.substring(12, 14);
+        }
+    </script>
+</body>
+
+</html>
