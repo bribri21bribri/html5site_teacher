@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Promise Demo</title>
+</head>
+
+<body>
+
+    <script>
+        var p1 = new Promise(function (resolve, reject) {
+            setTimeout(resolve, 3000, 'A')
+        })
+        var p2 = new Promise(function (resolve, reject) {
+            //setTimeout(resolve, 2000, 'B')
+            setTimeout(reject, 2000, 'error...')
+        })
+        var p3 = new Promise(function (resolve, reject) {
+            setTimeout(resolve, 1000, 'C')
+        })
+
+        // p1.then(function(value){
+        //     console.log(value);  //A
+        // })
+        // p2.then(function(value){
+        //     console.log(value);
+        // }).catch(function(err){
+        //     console.log(err);
+        // })
+        // p3.then(function(value){
+        //     console.log(value);
+        // })
+
+        //A B C
+        //C error,... A
+        Promise.all([p1, p2, p3])
+            .then(function (value) {
+                console.log(value);
+            }).catch(function (err) {
+                console.log(err);
+            })
+
+    </script>
+</body>
+
+</html>

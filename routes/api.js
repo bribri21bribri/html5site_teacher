@@ -1,7 +1,20 @@
 var express = require('express');
 var request = require('request');
 var zlib = require('zlib')
+var multer  = require('multer');
 var router = express.Router();
+//var upload = multer({ dest: 'public/uploads/' })
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+  })
+   
+  var upload = multer({ storage: storage })
 
 /* GET users listing. */
 //http://localhost:3000/api
@@ -42,6 +55,14 @@ router.get('/youbike',function(req,res){
         })  
     })
 })
+//http://localhost:3000/api/upload
+router.post('/upload', upload.single('myFile'), function (req, res, next) {
+    // req.file is the `avatar` file
+    // req.body will hold the text fields, if there were any
+    res.send(req.file);
+  })
+
+
 
 
 

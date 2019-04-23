@@ -46,19 +46,19 @@
         }, false);
 
         //todo1 將下列________換成建立Socket物件的程式碼，連線到 ws://localhost:8080/
-        var socket  = ________________________________;
+        var socket  = new WebSocket("ws://192.168.27.42:8080");
     
         
         function send(x, y, type, c, w) {           
             var jsonObj = { x: x, y: y, type: type, c: c, w: w };
             //todo2 將下列________換成適當的方法將資料傳給Socket Server
-            socket._________(JSON.stringify(jsonObj));
+            socket.send(JSON.stringify(jsonObj));
         };
 
         //todo3 將下列________換成適當的事件，來接收Socket Server回傳的結果
-        socket.addEventListener("___________", function (event) {
+        socket.addEventListener("message", function (event) {
             //todo4 將下列________換成適當的程式，來接收Socket Server回傳的結果
-            var data = JSON.parse(__________);           
+            var data = JSON.parse(event.data);           
                 if (data.type === "mousedown") {
                     context.beginPath();
                     context.strokeStyle = data.c;
