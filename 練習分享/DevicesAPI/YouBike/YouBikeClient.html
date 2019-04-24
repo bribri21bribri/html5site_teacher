@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Sent Event</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <div id="content"></div>
+    <!--
+        資料來源
+        http://data.taipei/opendata/datalist/datasetMeta?oid=8ef1626a-892a-4218-8344-f7ac46e1aa48
+
+
+         主要欄位說明：
+         sno：站點代號、
+         sna：場站名稱(中文)、
+         tot：場站總停車格、
+         sbi：場站目前車輛數量、
+         sarea：場站區域(中文)、
+         mday：資料更新時間、
+         lat：緯度、
+         lng：經度、
+         ar：地(中文)、
+         sareaen：場站區域(英文)、
+         snaen：場站名稱(英文)、
+         aren：地址(英文)、
+         bemp：空位數量、
+         act：全站禁用狀態
+     -->
+    <script>
+        //todo1 傳入YouBikeServer.ashx，建立EventSource物件
+        var source = new EventSource('YouBikeServer.ashx');
+        var count = 0;
+        //todo2 將下列_________換成適當的事件名稱
+        source.addEventListener('message', function (event) {
+
+            //todo3 將下列_________換成適當的程式，用來接收Server端回傳的結果
+            var data = JSON.parse(event.data);
+
+            var msg = "";
+            msg += "<b>站名 :</b> " + data.retVal["0001"].sna;
+            msg += "<b> 更新時間：</b>" + ConvertTime(data.retVal["0001"].mday);
+            msg += "<b> 目前停車數量：</b>" + data.retVal["0001"].sbi;
+            msg += "<b> 空位數量：</b>" + data.retVal["0001"].bemp + "<br>";
+
+            document.getElementById('content').innerHTML += msg + "<br>";
+
+            if (data.retVal["0001"].sbi != count) {
+                console.log(count)
+                console.log(data.retVal["0001"].sbi)
+                count = data.retVal["0001"].sbi;
+                navigator.serviceWorker.register('sw.js');
+
+
+                Notification.requestPermission(function (result) {
+                    if (result === 'granted') {
+                        navigator.serviceWorker.ready.then(function (registration) {
+                            registration.showNotification('捷運市政府站(3號出口)', {
+                                body: '還剩下' + count + '台車喔!!',
+                                icon: 'youbike.png',
+                                vibrate: [200, 100, 200, 100, 200, 100, 200],
+                                tag: 'YouBike'
+                            });
+                        });
+                    }
+                });
+            }
+        });
+
+
+        //將YYYYMMDDHHMMSS的時間格式轉成YYYY/MM/DD HH:MM:SS
+        function ConvertTime(OldTime) {
+            return OldTime.substring(0, 4) + "/" + OldTime.substring(4, 6) + "/" + OldTime.substring(6, 8) + " " + OldTime.substring(8, 10) + ":" + OldTime.substring(10, 12) + ":" + OldTime.substring(12, 14);
+        }
+
+
+    </script>
+</body>
+
+
+
+</html>

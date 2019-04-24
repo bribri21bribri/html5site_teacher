@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>非同步</title>
+</head>
+
+<body>
+    <script>
+        //    setTimeout(function(){
+        //        console.log("A")
+        //    },2000) 
+        //    setTimeout(function(){
+        //        console.log("B")
+        //    },2000)   
+        //    setTimeout(function(){
+        //        console.log("C")
+        //    },2000)    
+        //非同步 2秒>ABC
+
+        // setTimeout(function () {
+        //     console.log("A")
+        //     setTimeout(function () {
+        //         console.log("B")
+        //         setTimeout(function () {
+        //             console.log("C")
+        //         }, 2000)
+        //     }, 2000)
+        // }, 2000)
+       //同步 2秒>A>2秒>B>2秒>C
+
+    //    function funA(data){
+    //      setTimeout(function () {
+    //         funB(data);
+    //      }, 2000)
+    //    }
+       
+    //    function funB(data){
+    //      setTimeout(function () {
+    //         console.log(data + 'B');
+    //      }, 2000)
+    //    }
+
+    //    funA('A');  //AB
+
+    //    var result = funA('A');  //不會等兩秒
+    //   // console.log(result);      
+    //    var resultB = funB(result);
+    //    console.log(resultB);
+
+       //wait 2 secs => AB
+       //wait 2 secs => undefinedB
+       //undefinedB
+       //undefined
+
+       //ES6
+    //    function asyncFun(data){
+    //       var promise = new Promise(function(resolve,reject){
+    //           setTimeout(resolve,2000,data);
+    //       })
+    //       return promise;          
+    //    }
+
+    //    asyncFun('A')
+    //      .then(function(data){
+    //          console.log(data);
+    //          return asyncFun(data + 'B');
+    //      })
+    //      .then(function(data){
+    //          console.log(data);
+    //      })
+    //      .catch()
+
+   //ES7 async - await
+      function asyncFun(data){
+          var promise = new Promise(function(resolve,reject){
+              setTimeout(resolve,2000,data);
+          })
+          return promise;  
+
+        // setTimeout(function () {
+        //     return data;
+        //  }, 2000)        
+       }
+
+    async function start(){
+        var data = await asyncFun('A');
+        console.log(data);
+        var data1 = await asyncFun(data + 'B');
+        console.log(data1);
+        var data2 = await asyncFun(data1 + 'C');
+        console.log(data2)
+    }
+    start();
+
+
+
+    </script>
+</body>
+
+</html>

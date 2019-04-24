@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Notification Demo</title>
+</head>
+<body>
+    <input type="button" value="桌面提醒" id="button1">
+
+    <script>
+       document.querySelector('#button1').addEventListener('click',load);
+       var notification = null;
+       function load(){
+           console.log(Notification.permission);
+           if(Notification.permission === "granted"){
+               //允許通知
+               Send();
+
+           }else if(Notification.permission === "default"){
+               //要求權限
+               getPermission(load);
+           }else{
+               console.log("拒絕通知!!")
+           }
+       }
+       function Send(){
+            notification = new Notification("IISI 上課通知",{
+                   "body":"2019/2/14 18:00 HTML5課程",
+                   "icon":"/icons/icon-72x72.png"
+               })
+       }
+    //    notification.addEventListener("show",function(){
+    //        setTimeout("notification.close()",3000);
+    //    })
+
+       function getPermission(cb){
+             Notification.requestPermission(cb);
+       }
+    </script>
+</body>
+</html>

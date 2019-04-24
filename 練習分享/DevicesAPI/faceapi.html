@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <!--https://azure.microsoft.com/zh-tw/services/cognitive-services/face/-->
+    <video id="gum-local" autoplay width="640" height="480"></video><br />
+   <button>擷取影像</button><br /><canvas></canvas>  <div id="errorMsg"></div>
+ 
+   
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script>
+        var errorElement = document.querySelector('#errorMsg'),
+            video = document.querySelector('video'),
+            canvas =document.querySelector('canvas'),
+            button = document.querySelector('button'),
+                context =canvas.getContext('2d') ;
+ 
+        button.addEventListener("click",function () {
+            canvas.width = video.width;
+            canvas.height = video.height;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            sendToMS(function (text) {
+                var t = JSON.parse(text);
+                console.log(t[0].faceRectangle);
+
+            });
+        });
+        var constraints = { audio: false, video: true };
+        function handleSuccess(stream) {
+           // video.src = window.URL.createObjectURL(stream);
+           video.srcObject = stream;
+        }
+        function handleError(error) {
+            errorElement.innerHTML = error;
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints).
+            then(handleSuccess).catch(handleError);
+
+        function sendToMS(callback) {
+            canvas.toBlob(function (blob) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    var datas = JSON.parse(xhr.response);
+                    console.log(datas[0]);
+                    var x = datas[0].faceRectangle.top;
+                    var y = datas[0].faceRectangle.left;
+                    var w = datas[0].faceRectangle.width;
+                    var h = datas[0].faceRectangle.height;
+                    context.strokeRect(x, y, w, h);
+                   //alert(datas[0].faceAttributes.gender=="male" ? "男性":"女性");
+                    if (datas[0].faceAttributes.gender=="male"){
+                        if(datas[0].faceAttributes.age >= 35){
+                            alert ("男性，永遠35歲")
+                         }else{
+                            alert("男性，" + datas[0].faceAttributes.age + " 歲了!!");
+                        }
+                    }else{
+                        if(datas[0].faceAttributes.age >= 25){
+                            alert ("女性，永遠25歲")
+                        }else{
+                            alert("女性，" + datas[0].faceAttributes.age + " 歲了!!");
+                        }
+                    }
+                    
+                    
+                };
+               
+                //https://southeastasia.api.cognitive.microsoft.com/face/v1.0
+                xhr.open('POST', 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender,emotion');
+                xhr.setRequestHeader("Content-Type", "application/octet-stream");
+                
+                //申請自己的API Key
+                //https://azure.microsoft.com/en-us/try/cognitive-services/   
+                xhr.setRequestHeader("Ocp-Apim-Subscription-Key", '申請自己的API Key');
+                
+                xhr.send(blob);
+            }, 'image/jpeg', .8);
+        }
+    </script>
+</body>
+</html>

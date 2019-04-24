@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style>
+        #carousel-example-generic{
+            width:100%;
+            height:auto;
+            margin:0 auto;
+        }
+        img{width:100%}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Fullscreen API</h2>
+        <input type="button" value="全螢幕" id="buttonScreen">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img src="580205_sim199.jpg">
+                    <div class="carousel-caption">
+                        語音5折、上網$489吃到飽
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="580x205_1607es.jpg">
+                    <div class="carousel-caption">
+                        網路門市獨家好禮
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="580x205_campus.jpg">
+                    <div class="carousel-caption">
+                        4G 199 / 499 單門號！
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="580x205_s7_1607.jpg">
+                    <div class="carousel-caption">
+                        Samaung S7 熱賣中！
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script>
+ 
+        console.log(document.webkitFullscreenEnabled);
+        document.querySelector("#buttonScreen").addEventListener("click", enterFullScreen);
+        function enterFullScreen() {          
+            var elem = document.getElementById("carousel-example-generic")
+            elem.webkitRequestFullscreen();
+        }
+        document.onwebkitfullscreenchange = function(){
+            console.log("fullscreenchange");
+        }
+    </script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <meter min="0" max="1" low="0.3" high="0.5" value="0.5">50%</meter><span id="span1"></span>
+    <div id="charging"></div>
+    <div id="level"></div>
+    <div id="dischargingtime"></div>
+    <div id="chargingtime"></div>
+    <script>
+        var meter = document.getElementsByTagName("meter")[0],
+          status = document.getElementById("status"),
+           span = document.getElementById("span1");
+
+        function updateBatteryStatus(battery) {
+            console.log(battery);
+            document.querySelector("#charging").textContent = battery.charging ? 'charging' : 'not charging';
+            document.querySelector("#level").textContent = "電池量:" + battery.level;
+            document.querySelector("#dischargingtime").textContent = "可用時間 ： " + FormatTime(battery.dischargingTime);
+            document.querySelector("#chargingtime").textContent ="充電時間：" + FormatTime(battery.chargingTime); 
+
+            meter.value = battery.level;
+            meter.textContent = (Math.floor(battery.level * 100)) + "%";
+            span.innerHTML = "(" + meter.textContent + ")";
+        }    
+
+        navigator.getBattery().then(function (battery) {
+            updateBatteryStatus(battery);
+
+            battery.addEventListener("levelchange", function () {
+                console.log("levelchange");
+                updateBatteryStatus(battery);
+            });
+            //battery.addEventListener("chargingtimechange", function () {
+            //    console.log("chargingtimechange");
+            //    updateBatteryStatus(battery);              
+            //})
+            //battery.addEventListener("dischargingtimechange", function () {
+            //    console.log("dischargingtimechange");
+            //    updateBatteryStatus(battery);
+            //});  
+            battery.addEventListener("chargingchange", function () {
+                console.log("chargingchange");
+                updateBatteryStatus(battery);
+            });
+           
+        })
+       
+
+       function FormatTime(seconds) {
+            var humanReadableTime = seconds + 's';
+            var hours = parseInt(seconds / 3600);
+            var minutes = parseInt(((seconds / 3600) - hours) * 60);
+            var humanReadableTime = hours;
+            humanReadableTime += ':';
+            if (minutes < 10) {
+                humanReadableTime += '0';
+            }
+            humanReadableTime += minutes;
+
+            return humanReadableTime;
+        }
+    </script>
+</body>
+
+</html>

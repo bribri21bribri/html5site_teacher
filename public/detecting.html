@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Detecting</title>
+</head>
+<body>
+    <input type="date"><input type="datetime">
+    <script>
+//判斷全域物件的屬性是否存在
+if(!!window.Worker){
+    console.log("支援 webworker")
+}else{
+    console.log("不支援 webworker")
+}
+if(!!navigator.geolocation){
+    console.log("支援 getlocation")
+}else{
+    console.log("不支援 getlocation")
+}
+// 判斷元素的屬性是否支援 <input placholder
+var eleInput = document.createElement("input");
+if('placeholder' in eleInput){
+    console.log("支援 placeholder")
+}
+else{
+    console.log("不支援 placeholder")
+}
+
+// 判斷元素的方法是否存在
+var eleCanvas = document.createElement("canvas");
+if(!!eleCanvas.getContext("2d")){
+    console.log("支援 getContext()")
+}else{
+    console.log("不支援 getContext()")
+}
+
+
+// 判斷元素屬性的屬性值是否存在  <input type="color"  <input type="text"
+  var eleInput = document.createElement("input");
+  eleInput.setAttribute("type","date");
+  if(eleInput.type == "date"){
+    console.log("支援 date type")
+}else{
+    console.log("不支援 date type")
+}
+    </script>
+</body>
+</html>

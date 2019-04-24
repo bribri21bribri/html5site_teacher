@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        #myMap{
+          width: 600px;
+          height: 400px;
+       
+        }
+    </style>
+</head>
+<body>  
+    <div id="myMap"></div>
+    <div id="info"></div>
+    
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMPEOWpcGQmy4KrA8BbW3RpK1Dx912nA4"
+            type="text/javascript"></script>
+  
+
+    <script>
+
+            navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+            
+            function successHandler(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+               
+
+                //取得地圖座標
+                var latlng = new google.maps.LatLng(lat, lng);
+               
+                //取得地址
+                codeLatLng(latlng);
+
+                var myOptions = {
+                    zoom: 13,
+                    center: latlng,
+                    mapTypId: google.maps.MapTypeId.ROADMAP
+                };
+                //建立地圖
+                var map = new google.maps.Map(document.getElementById("myMap"), myOptions);
+               
+                //建立標記
+                var marker = new google.maps.Marker({ position: latlng, title: "office" });
+                marker.setMap(map);
+            }
+
+           
+            
+    
+        function errorHandler(error) {
+            alert(error.code + "," + error.message);
+        }
+
+        //取得住址
+        function codeLatLng(latlng) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'latLng': latlng }, function (result, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var address = result[0].formatted_address; //取得住址
+                    document.getElementById("info").innerHTML = address;
+                    //for (var i = 0; i < result[0].address_components.length; i++) {
+                    //    //alert(result[0].address_components[i].short_name);
+                    //    alert(result[0].address_components[i].long_name);
+                    //}
+                }
+            })
+        }
+    </script>
+</body>
+</html>
